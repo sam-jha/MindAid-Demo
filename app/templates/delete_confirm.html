@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Delete all entries - MindAId{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Delete all your entries?</h1>
+  <p>This permanently removes every journal entry you have written. It can't be undone.</p>
+  <p class="muted">Any summary a psychologist has already generated is not deleted by this button.</p>
+  <form method="post" action="/patient/delete" class="row">
+    <button class="btn btn-danger" type="submit">Yes, delete everything</button>
+    <a class="btn btn-quiet" href="/patient/log">Cancel</a>
+  </form>
+</section>
+{% endblock %}

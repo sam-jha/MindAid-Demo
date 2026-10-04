@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}My journal - MindAId{% endblock %}
+{% block content %}
+<h1>My journal</h1>
+{% if user.is_demo %}<p class="notice-line"><strong>Demo tip:</strong> add an entry below. Notice the support numbers at the bottom of every screen. Use <em>Switch user</em> (top right) to see the psychologist side.</p>{% endif %}
+
+{% if summary_date %}
+<p class="notice-line">Your psychologist generated a summary on {{ summary_date | fmt_date }}.</p>
+{% endif %}
+
+<section class="card">
+  <h2>New entry</h2>
+  {% if error == "empty" %}<p class="error" role="alert">Please write something first.</p>{% endif %}
+  {% if error == "long" %}<p class="error" role="alert">That entry is too long (5000 characters max).</p>{% endif %}
+  <form method="post" action="/patient/log">
+    <label for="text" class="muted">What's on your mind?</label>
+    <textarea id="text" name="text" maxlength="5000" required></textarea>
+    <p><button class="btn" type="submit">Save entry</button></p>
+  </form>
+</section>
+
+<section>
+  <h2>Past entries</h2>
+  {% for e in entries %}
+  <article class="card">
+    <p class="muted">{{ e.created_at | fmt_datetime }}{% if e.is_demo %} <span class="tag tag-demo">DEMO</span>{% endif %}</p>
+    <p class="entry-text">{{ e.text }}</p>
+  </article>
+  {% else %}
+  <p class="muted">No entries yet.</p>
+  {% endfor %}
+</section>
+
+{% if entries %}
+<p><a class="btn btn-danger" href="/patient/delete">Delete all my entries</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% from "_summary.html" import summary_panel %}
+{% block title %}{{ patient.name }} - MindAId{% endblock %}
+{% block content %}
+<p><a href="/psychologist">&larr; All patients</a></p>
+<h1>{{ patient.name }}</h1>
+{% if message %}<p class="notice-line" role="status">{{ message }}</p>{% endif %}
+
+<section class="card">
+  <div class="row between">
+    <h2>Latest summary</h2>
+    <form method="post" action="/psychologist/patients/{{ patient.id }}/summarise">
+      <button class="btn" type="submit">Summarise</button>
+    </form>
+  </div>
+  {% if latest %}{{ summary_panel(latest) }}
+  {% else %}<p class="muted">No summary yet. Click Summarise to generate one.</p>{% endif %}
+</section>
+
+{% if previous %}
+<section class="card">
+  <h2>Previous summaries</h2>
+  {% for s in previous %}
+  <details><summary>{{ s.generated_at | fmt_datetime }} - {{ s.priority_level | capitalize }}</summary>{{ summary_panel(s) }}</details>
+  {% endfor %}
+</section>
+{% endif %}
+
+<section>
+  <h2>Raw entries ({{ entries | length }})</h2>
+  {% for e in entries %}
+  <article class="card">
+    <p class="muted">{{ e.created_at | fmt_datetime }}{% if e.is_demo %} <span class="tag tag-demo">DEMO</span>{% endif %}</p>
+    <p class="entry-text">{{ e.text }}</p>
+  </article>
+  {% else %}<p class="muted">No entries yet.</p>{% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{# One summary panel. Used for the latest summary and for previous ones. #}
+{% macro level_tag(level) -%}
+  {% if level %}<span class="tag tag-{{ level }}">{{ {"urgent":"Urgent","blocked":"AI blocked - read entries","notable":"Notable","routine":"Routine","unassessed":"Unassessed"}[level] }}</span>
+  {%- else %}<span class="tag tag-unassessed">Not yet summarised</span>{% endif %}
+{%- endmacro %}
+
+{% macro summary_panel(s) %}
+{% set c = s.content %}
+{% if s.priority_level == "blocked" %}
+<p>{{ level_tag("blocked") }}</p>
+<p class="muted">{{ s.generated_at | fmt_datetime }}</p>
+<p><strong>No AI summary was produced.</strong> {{ c.narrative }}</p>
+<p class="muted">This label is not an assessment of risk. It only means the AI could not summarise these entries.</p>
+{% else %}
+<p class="ai-label">AI-generated - verify against the raw entries</p>
+<p class="muted">Generated {{ s.generated_at | fmt_datetime }} by <em>{{ s.generated_by }}</em>.
+   Covers entries from {{ s.entries_covered_from | fmt_date }} to {{ s.entries_covered_to | fmt_date }}.</p>
+<p>{{ level_tag(s.priority_level) }} {{ s.priority_reason }}</p>
+<h3>Summary</h3>
+<p>{{ c.narrative }}</p>
+{% if c.themes %}<p><strong>Themes:</strong> {{ c.themes | join(", ") }}</p>{% endif %}
+<p><strong>Mood pattern:</strong> {{ c.mood_pattern }}</p>
+<h3>Flagged content</h3>
+{% for item in c.concerning_content %}
+<blockquote>"{{ item.excerpt }}"<br><span class="muted">{{ item.note }}</span></blockquote>
+{% else %}
+<p>Nothing was flagged by this summary. <strong>This does not mean there is no risk</strong> - read the raw entries.</p>
+{% endfor %}
+<p><strong>Suggested session focus:</strong> {{ c.suggested_session_focus }}</p>
+<p class="muted"><strong>Uncertainty:</strong> {{ c.uncertainty_note }}</p>
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Create an account - MindAId{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Create a patient account</h1>
+  <p class="notice-line"><strong>Fictional content only.</strong> This is a portfolio demo. Please don't use a real password you use elsewhere, and don't write real personal details in your entries.</p>
+  {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" action="/register" class="stack">
+    <label for="name">Name (a nickname is fine)</label>
+    <input id="name" name="name" value="{{ name }}" maxlength="100" required>
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" value="{{ email }}" autocomplete="username" required>
+    <label for="password">Password (at least 10 characters)</label>
+    <input id="password" name="password" type="password" minlength="10" autocomplete="new-password" required>
+    <label for="confirm">Confirm password</label>
+    <input id="confirm" name="confirm" type="password" minlength="10" autocomplete="new-password" required>
+    <p><button class="btn" type="submit">Create account</button></p>
+  </form>
+  <p class="muted">Already have an account? <a href="/">Sign in</a>. Psychologist accounts are not self-service.</p>
+</section>
+{% endblock %}

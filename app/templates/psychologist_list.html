@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_summary.html" import level_tag %}
+{% block title %}My patients - MindAId{% endblock %}
+{% block content %}
+<h1>My patients</h1>
+<p class="muted">Priority is an AI-generated sorting aid, not a monitored alert.</p>
+{% if user.is_demo %}<p class="notice-line"><strong>Demo tip:</strong> click <em>Summarise all with new entries</em> to generate AI summaries, then open a patient to see the summary next to their raw entries. Use <em>Switch user</em> (top right) to see the patient side.</p>{% endif %}
+{% if message %}<p class="notice-line" role="status">{{ message }}</p>{% endif %}
+
+<div class="toolbar">
+  <span>Sort by:
+    {% if sort == "recent" %}<a href="/psychologist">Priority</a> | <strong>Most recent entry</strong>
+    {% else %}<strong>Priority</strong> | <a href="/psychologist?sort=recent">Most recent entry</a>{% endif %}
+  </span>
+  <form method="post" action="/psychologist/summarise-all">
+    <button class="btn" type="submit" {% if not any_new %}disabled{% endif %}>Summarise all with new entries</button>
+  </form>
+</div>
+
+{% for r in rows %}
+<a class="card patient-card" href="/psychologist/patients/{{ r.patient.id }}">
+  <div class="row">
+    <strong class="patient-name">{{ r.patient.name }}</strong>
+    {{ level_tag(r.level) }}
+    {% if r.new_count %}<span class="tag tag-new">{{ r.new_count }} new {{ "entry" if r.new_count == 1 else "entries" }} since last summary</span>{% endif %}
+  </div>
+  <p class="muted">{% if r.latest_entry %}Latest entry {{ r.latest_entry | fmt_datetime }}{% else %}No entries yet{% endif %}
+    {% if r.summary %} · Summary generated {{ r.summary.generated_at | fmt_date }} <em>(AI-generated)</em>{% endif %}</p>
+</a>
+{% else %}
+<p class="muted">No patients yet. Run the seed script (see README).</p>
+{% endfor %}
+{% endblock %}

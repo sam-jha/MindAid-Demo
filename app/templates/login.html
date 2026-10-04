@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Sign in - MindAId{% endblock %}
+{% block content %}
+<h1>Welcome to MindAId</h1>
+<p class="lead">A portfolio prototype for journaling between therapy sessions.</p>
+<p class="notice-line"><strong>Fictional content only.</strong> This is a demo: don't enter real personal details. Data may be reset whenever the app restarts.</p>
+
+<div class="grid">
+  <section class="card">
+    <h2>Sign in</h2>
+    {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+    <form method="post" action="/login" class="stack" id="signin-form">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="{{ email }}" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+    </form>
+    <div class="signin-actions">
+      <button class="btn" type="submit" form="signin-form">Sign in</button>
+      {% if show_demo_buttons %}
+      <span class="muted">or skip sign-in:</span>
+      <form method="post" action="/demo/patient" class="inline"><button class="btn btn-quiet" type="submit">Explore as patient</button></form>
+      <form method="post" action="/demo/psychologist" class="inline"><button class="btn btn-quiet" type="submit">Explore as psychologist</button></form>
+      {% endif %}
+    </div>
+    <p class="muted">New here? <a href="/register">Create a patient account</a></p>
+  </section>
+
+  {% if demo_users %}
+  <section class="card">
+    <h2>Try the demo accounts</h2>
+    <p class="muted">Password for all of them: <code>{{ demo_password }}</code></p>
+    {% for u in demo_users %}
+    <p class="demo-account"><strong>{{ u.name }}</strong> <span class="tag">{{ u.role }}</span><br><code>{{ u.email }}</code></p>
+    {% endfor %}
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MindAId{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="demo-banner">Demo prototype - no real accounts</div>
+  <header class="site-header">
+    <a class="brand" href="/">MindAId</a>
+    {% if user %}
+    <form method="post" action="/logout" class="inline">
+      <span class="muted">Signed in as {{ user.name }}{% if user.is_demo %} (DEMO){% endif %}</span>
+      <button class="btn btn-quiet" type="submit">Switch user</button>
+    </form>
+    {% endif %}
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  {% if user and user.role == "patient" %}
+  <footer class="support-footer">
+    <strong>Need support?</strong>
+    {% for name, details in support_resources %}
+      <span>{{ name }}: {{ details }}.</span>
+    {% endfor %}
+    <span class="muted">This app is not monitored and is not crisis support.</span>
+  </footer>
+  {% endif %}
+</body>
+</html>

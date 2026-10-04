@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Before you begin - MindAId{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Before you begin</h1>
+  <p class="lead">Please read this each time you sign in. It takes a minute.</p>
+  <ul class="notice">
+    {% for p in points %}
+    <li><strong>{{ p.title }}.</strong> {{ p.body }}</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Support resources</h3>
+  <ul class="notice">
+    {% for name, details in support_resources %}
+    <li><strong>{{ name }}:</strong> {{ details }}</li>
+    {% endfor %}
+  </ul>
+
+  {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" action="/patient/consent">
+    <label class="check">
+      <input type="checkbox" name="understood" value="yes" id="understood" required>
+      I understand
+    </label>
+    <button class="btn" type="submit" id="continue" disabled>Continue</button>
+  </form>
+</section>
+<script>
+  // Convenience only - the server also refuses to continue without the tick.
+  const box = document.getElementById("understood"), btn = document.getElementById("continue");
+  btn.disabled = !box.checked;
+  box.addEventListener("change", () => { btn.disabled = !box.checked; });
+</script>
+{% endblock %}

@@ -1,0 +1,20 @@
+# Secrets and local config
+.env
+*.key
+*.pem
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+.pytest_cache/
+
+# macOS / editor
+.DS_Store
+.vscode/
