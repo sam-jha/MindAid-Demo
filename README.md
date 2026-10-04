@@ -1,5 +1,9 @@
 # MindAId (demo prototype)
 
+**Live demo: https://mindaid-app.calmdune-35b6fddc.uksouth.azurecontainerapps.io**
+No sign-up needed: on the login page click **Explore as psychologist** or **Explore as patient**.
+(Fictional data only. The demo resets whenever the app restarts.)
+
 A small portfolio prototype: patients write journal entries between therapy sessions, and a
 psychologist can read them and click **Summarise** to generate an AI summary on demand.
 
